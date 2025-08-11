@@ -1,36 +1,33 @@
-**GARANTIA-BUSCOU** é um formulário inteligente que permite ao consumidor reunir evidências organizadas para disputas relacionadas a garantias de produtos em plataformas de e-commerce ou lojas físicas.
+🧰 Funcionalidades
+Interface intuitiva para preenchimento rápido e organizado de evidências
 
-## 🎯 Objetivo
+Upload de imagens e documentos comprobatórios
 
-Facilitar o processo de comprovação de garantia, reunindo dados essenciais
+Página inicial para seleção do marketplace ou canal de disputa (Mercado Livre, Shopee, Magalu, etc.)
 
-## 🧰 Funcionalidades
+Geração automática da Imagem pronta para envio
 
-- Formulário intuitivo para preenchimento de evidências
-- Upload de Imagens
-- Geração de relatório final para envio à plataforma
-- Armazenamento seguro das informações
+🛠️ Tecnologias utilizadas
+HTML
 
-## 🛠️ Tecnologias utilizadas
+CSS
 
-- HTML, CSS, JavaScript
-  
-```bash
-git clone https://github.com/seu-usuario/garantia-buscou.git
-cd garantia-buscou
-npm install
-npm start
+JavaScript
 
-🧪 Como usar
+🚀 Como usar
+Na página inicial, selecione o marketplace ou canal onde será enviada a contestação (ex: Mercado Livre, Shopee, Magalu, etc).
 
-- Preencha ou edite o texto detalhando o erro identificado, seja da plataforma ou do cliente que abriu a reclamação incorretamente.
-- Anexe os arquivos que comprovem a situação.
-- Gere o relatório final clicando no botão de download.
-- Utilize o relatório gerado para contestar diretamente na plataforma ou loja.
+Preencha ou edite o texto detalhando o erro identificado, seja da plataforma, do cliente ou do fornecedor que gerou a reclamação incorreta.
+
+Anexe arquivos e imagens que comprovem a situação.
+
+Gere o relatório final clicando no botão de download.
+
+Utilize a imagem para contestar diretamente na plataforma, loja ou enviar ao fornecedor responsável.
 
 📄 Licença
 Este projeto está licenciado sob os termos da MIT License.
 
 🙋‍♂️ Autor
-Feito por Gustavo Bernardi.
+Desenvolvido por Gustavo Bernardi
 Contato: gubernardi@hotmail.com
