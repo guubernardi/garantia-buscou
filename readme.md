@@ -34,5 +34,5 @@ npm start
 Este projeto está licenciado sob os termos da MIT License.
 
 🙋‍♂️ Autor
-Feito com 💙 por Gustavo.
+Feito por Gustavo Bernardi.
 Contato: gubernardi@hotmail.com
