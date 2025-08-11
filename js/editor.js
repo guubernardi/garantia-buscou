@@ -79,16 +79,26 @@ input.addEventListener('change', function () {
 // ---- DOWNLOAD DA TELA COMO IMAGEM ----
 function downloadScreenshot() {
   const container = document.querySelector('.container');
-  
+
+  // Aumentar altura para caber todo o conteúdo
+  const originalOverflow = document.body.style.overflow;
+  document.body.style.overflow = 'visible';
+
   setTimeout(() => {
-    html2canvas(container).then(canvas => {
+    html2canvas(container, {
+      scale: 2, // aumenta a resolução
+      useCORS: true, // imagens externas
+      logging: false,
+      windowWidth: container.scrollWidth,  // largura total
+      windowHeight: container.scrollHeight // altura total
+    }).then(canvas => {
       const link = document.createElement('a');
       link.download = 'print.png';
-      link.href = canvas.toDataURL();
+      link.href = canvas.toDataURL('image/png');
       link.click();
+
+      // Restaurar rolagem original
+      document.body.style.overflow = originalOverflow;
     });
-  }, 300); // espera curta pra garantir que imagens estejam no DOM
-  button.classList.add('pulsando');
-  // ... depois do print:
-  button.classList.remove('pulsando');
+  }, 300);
 }
