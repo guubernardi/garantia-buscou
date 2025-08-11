@@ -7,17 +7,14 @@ Facilitar o processo de comprovação de garantia, reunindo dados essenciais
 ## 🧰 Funcionalidades
 
 - Formulário intuitivo para preenchimento de evidências
-- Upload de arquivos (imagens, PDFs, etc.)
+- Upload de Imagens
 - Geração de relatório final para envio à plataforma
 - Armazenamento seguro das informações
 
 ## 🛠️ Tecnologias utilizadas
 
 - HTML, CSS, JavaScript
-- Node.js + Express (backend)
-- MongoDB (armazenamento)
-- Multer (upload de arquivos)
-
+- 
 ```bash
 git clone https://github.com/seu-usuario/garantia-buscou.git
 cd garantia-buscou
@@ -25,10 +22,11 @@ npm install
 npm start
 
 🧪 Como usar
-- Preencha o formulário com os dados do produto e da compra.
-- Anexe os arquivos que comprovam a situação.
-- Gere o relatório final.
-- Use o relatório para contestar diretamente na plataforma ou loja.
+
+- Preencha ou edite o texto detalhando o erro identificado, seja da plataforma ou do cliente que abriu a reclamação incorretamente.
+- Anexe os arquivos que comprovem a situação.
+- Gere o relatório final clicando no botão de download.
+- Utilize o relatório gerado para contestar diretamente na plataforma ou loja.
 
 📄 Licença
 Este projeto está licenciado sob os termos da MIT License.
