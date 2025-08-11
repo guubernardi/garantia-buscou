@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Garantia | Formulário</title>
+
+  <!-- Bootstrap e fontes -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <!-- Seu CSS -->
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <!-- Menu fixo -->
+  <div class="menu">
+    <nav>
+      <ul>
+        <a href="index.html"><li><i class="bi bi-arrow-left"></i> Voltar</li></a>
+        <a href="settings.html"><li>Configurações</li></a>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container">
+    <!-- Editor fixo (sticky) -->
+    <div class="sticky-editor">
+      <div class="edit-title">
+        <textarea id="titleInput" rows="10" placeholder="Digite o novo texto..."></textarea>
+        <div class="actions">
+          <button id="updateBtn" onclick="updateTitle()" disabled>Atualizar Título</button>
+          <small class="hint">Dica: use Ctrl/Cmd + Enter para confirmar</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Título editável -->
+    <h1 id="mainTitle">
+      Prezados,<br><br>
+      Gostaria de solicitar a revisão da devolução aberta para o pedido, pois o produto enviado ao cliente está totalmente de acordo com o anúncio, incluindo a descrição e as fotos apresentadas na página do produto. <br><br>
+      Entendemos que a abertura da devolução foi feita de forma incorreta, possivelmente por engano do cliente. Diante disso, pedimos gentilmente:<br><br>
+      1. A reclassificação da devolução com o motivo correto, conforme as políticas da plataforma;<br><br>
+      2. A revisão do frete de devolução, uma vez que o envio foi feito corretamente por nossa parte;<br><br>
+      3. A verificação e correção de qualquer impacto negativo em nossa reputação, caso essa devolução tenha afetado nossos indicadores de forma indevida.<br><br>
+      Reforçamos nosso compromisso com a transparência e o bom atendimento ao cliente, e solicitamos que essa situação seja reavaliada para evitar prejuízos indevidos ao nosso desempenho na plataforma.
+      Agradecemos desde já pela atenção e aguardamos retorno.
+    </h1>
+
+    <!-- Upload de imagens -->
+    <div class="btn">
+      <label for="ImageInput" class="button">
+        <i class="bi bi-image"></i>
+        <span class="lable">Imagens</span>
+      </label>
+      <input type="file" id="ImageInput" accept="image/*" multiple style="display: none;" />
+      <p id="preview-msg" style="margin-top: 10px; color: #444; font-family: Poppins;"></p>
+    </div>
+
+    <!-- Cards de fotos -->
+    <div class="fotos">
+      <div class="card"><h2>Foto</h2></div>
+      <div class="card"><h2>Foto</h2></div>
+      <div class="card"><h2>Foto</h2></div>
+      <div class="card"><h2>Foto</h2></div>
+    </div>
+
+    <!-- Baixar print -->
+    <div class="btn download-btn">
+      <button class="button" onclick="downloadScreenshot()" id="bd">
+        <i class="bi bi-download"></i>
+        <span class="lable">📸 Baixar Print</span>
+    </button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
