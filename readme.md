@@ -14,7 +14,7 @@ Facilitar o processo de comprovação de garantia, reunindo dados essenciais
 ## 🛠️ Tecnologias utilizadas
 
 - HTML, CSS, JavaScript
-- 
+  
 ```bash
 git clone https://github.com/seu-usuario/garantia-buscou.git
 cd garantia-buscou
