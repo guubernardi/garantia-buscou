@@ -157,7 +157,7 @@ textarea#titleInput {
 /* ==== TÍTULO ==== */
 h1 {
   font-family: "Kanit", Arial, Helvetica, sans-serif;
-  font-size: 1.3em;
+  font-size: 1.2em;
   text-align: center;
   gap: 3em;
 }
@@ -232,9 +232,9 @@ h1 {
   gap: 30px;
 }
 .card {
-  min-width: 350px;
-  min-height: 350px;
-  max-width: 190px;
+  min-width: 320px;
+  min-height: 320px;
+  max-width: 170px;
   width: auto;
   background: #b3b8be;
   border-radius: 20px;

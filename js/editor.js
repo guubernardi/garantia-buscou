@@ -76,29 +76,92 @@ input.addEventListener('change', function () {
 
 
 
+/**
+ * @file screenshot.js
+ * @description Contém a lógica para capturar a tela inteira da página web e forçar o download como uma imagem PNG.
+ * @author Seu Nome (ou da equipe)
+ * @date 2025-08-12
+ */
+
 // ---- DOWNLOAD DA TELA COMO IMAGEM ----
+
+/**
+ * Tira um "print" do body inteiro da página usando a biblioteca html2canvas,
+ * cria uma imagem a partir dele e inicia o download no navegador do usuário.
+ */
 function downloadScreenshot() {
-  const container = document.querySelector('.container');
 
-  // Aumentar altura para caber todo o conteúdo
-  const originalOverflow = document.body.style.overflow;
-  document.body.style.overflow = 'visible';
+  // O alvo da captura é a página inteira, então o melhor elemento para isso é o <body>.
+  const targetElement = document.body;
 
+  // --- PREPARAÇÃO PARA A CAPTURA ---
+
+  // 1. Salvar a posição atual do scroll do usuário.
+  // A gente vai resetar o scroll pra tirar o print, então precisamos guardar isso
+  // para devolver a página ao estado original depois, sem atrapalhar a navegação.
+  const originalScrollX = window.scrollX;
+  const originalScrollY = window.scrollY;
+
+  // 2. Levar a página para o topo.
+  // Macete essencial! O html2canvas renderiza a partir da viewport. Se não fizermos
+  // isso, a captura pode começar do meio da página e cortar o conteúdo. Também garante
+  // que elementos com `position: fixed` sejam posicionados corretamente.
+  window.scrollTo(0, 0);
+
+  // 3. Um pequeno delay.
+  // O `scrollTo` não é 100% síncrono. O navegador precisa de um tempinho para
+  // renderizar a mudança. Esse timeout garante que a captura só aconteça DEPOIS
+  // que a página já rolou para o topo. 100ms é um valor seguro.
   setTimeout(() => {
-    html2canvas(container, {
-      scale: 2, // aumenta a resolução
-      useCORS: true, // imagens externas
-      logging: false,
-      windowWidth: container.scrollWidth,  // largura total
-      windowHeight: container.scrollHeight // altura total
+
+    // --- EXECUÇÃO DO HTML2CANVAS ---
+    html2canvas(targetElement, {
+      // Opções para garantir uma captura de qualidade e completa.
+
+      // Aumenta a resolução da imagem final. `scale: 2` é como um "retina display".
+      scale: 2,
+
+      // Necessário para que imagens de outros domínios (Ex: de um CDN) sejam renderizadas.
+      // Se `false`, essas imagens não aparecerão no print.
+      useCORS: true,
+
+      // Define o tamanho da imagem gerada para ser o tamanho total do conteúdo da página,
+      // incluindo a parte que está fora da tela (o scroll). É isso que captura "tudo".
+      width: targetElement.scrollWidth,
+      height: targetElement.scrollHeight,
+
+      // Informa ao html2canvas o tamanho da "janela" e a posição do scroll.
+      // Como forçamos o scroll para (0,0), passamos esses valores. Crucial para
+      // que elementos fixos e outros cálculos de layout funcionem bem.
+      windowWidth: document.documentElement.clientWidth,
+      windowHeight: document.documentElement.clientHeight,
+      scrollX: 0,
+      scrollY: 0
+
     }).then(canvas => {
+      // --- MANIPULAÇÃO DO RESULTADO ---
+      
+      // O html2canvas retorna um elemento <canvas>. Agora, vamos convertê-lo em um arquivo.
+
+      // 1. Cria um elemento de link <a> temporário em memória.
       const link = document.createElement('a');
-      link.download = 'print.png';
+
+      // 2. Define o nome do arquivo que será baixado.
+      link.download = 'captura-de-tela.png';
+
+      // 3. Converte o canvas para uma URL de dados (formato base64) e a define como o `href` do link.
       link.href = canvas.toDataURL('image/png');
+
+      // 4. Simula um clique no link para iniciar o download. É um truque padrão no frontend.
       link.click();
 
-      // Restaurar rolagem original
-      document.body.style.overflow = originalOverflow;
+    }).finally(() => {
+      // --- LIMPEZA PÓS-CAPTURA ---
+
+      // A parte mais importante para a experiência do usuário:
+      // Devolve o scroll para a posição original. Assim, a captura ocorre
+      // de forma "invisível", sem que o usuário perca onde estava na página.
+      window.scrollTo(originalScrollX, originalScrollY);
     });
-  }, 300);
+  }, 100);
 }
