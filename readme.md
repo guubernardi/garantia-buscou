@@ -1,38 +1,35 @@
-**GARANTIA-BUSCOU** é um formulário inteligente que permite ao consumidor reunir evidências organizadas para disputas relacionadas a garantias de produtos em plataformas de e-commerce ou lojas físicas.
 
-## 🎯 Objetivo
+🧰 Funcionalidades
+Interface intuitiva para preenchimento rápido e organizado de evidências
 
-Facilitar o processo de comprovação de garantia, reunindo dados essenciais
+Upload de imagens e documentos comprobatórios
 
-## 🧰 Funcionalidades
+Página inicial para seleção do marketplace ou canal de disputa (Mercado Livre, Shopee, Magalu, etc.)
 
-- Formulário intuitivo para preenchimento de evidências
-- Upload de arquivos (imagens, PDFs, etc.)
-- Geração de relatório final para envio à plataforma
-- Armazenamento seguro das informações
+Geração automática de imagem pronta para envio
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+🛠️ Tecnologias utilizadas
+HTML
 
-## 🛠️ Tecnologias utilizadas
+CSS
 
-- HTML, CSS, JavaScript
-- Node.js + Express (backend)
-- MongoDB (armazenamento)
-- Multer (upload de arquivos)
+JavaScript
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+🚀 Como usar
+Na página inicial, selecione o marketplace ou canal onde será enviada a contestação (ex: Mercado Livre, Shopee, Magalu, etc).
 
-```bash
-git clone https://github.com/seu-usuario/garantia-buscou.git
-cd garantia-buscou
-npm install
-npm start
+Preencha ou edite o texto detalhando o erro identificado, seja da plataforma, do cliente ou do fornecedor que recebeu uma autorização incorreta.
 
-🧪 Como usar
-- Preencha o formulário com os dados do produto e da compra.
-- Anexe os arquivos que comprovam a situação.
-- Gere o relatório final.
-- Use o relatório para contestar diretamente na plataforma ou loja.
+Anexe arquivos e imagens que comprovem a situação.
 
+Gere o relatório final clicando no botão de download.
+
+Utilize a imagem gerada para contestar diretamente na plataforma, loja ou enviar ao fornecedor responsável.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 📄 Licença
 Este projeto está licenciado sob os termos da MIT License.
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 🙋‍♂️ Autor
-Feito com 💙 por Gustavo.
+Desenvolvido por Gustavo Bernardi
 Contato: gubernardi@hotmail.com
+
