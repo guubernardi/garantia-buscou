@@ -3,63 +3,350 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Planilha de Reclamações — Simulador tipo Excel</title>
   <link rel="stylesheet" href="css/planilha.css">
+  <title>Planilha de Reclamações</title>
 </head>
 <body>
-  <div class="wrapper container">
-    <img src="logo.png" alt="Logo" class="logo">
-    <h1>Planilha de Reclamações</h1>
-    <div class="desc">Simulador tipo Excel com edição direta, salvamento local, filtros e exportação CSV. Campos: <strong>DATA CONTROLE</strong>, <strong>DATA CONTROLE</strong>, <strong>LOJA</strong>, <strong>SKU</strong>, <strong>RECLAMAÇÃO</strong>, <strong>ID DE VENDA</strong>, <strong>TIPO RECLAMAÇÃO</strong>, <strong>STATUS</strong>, <strong>RESPONSAVEL</strong>, <strong>VALOR</strong>, <strong>Observações</strong>, <strong>DATA BAIXA</strong>.</div>
 
-    <div class="toolbar">
-      <div class="btns">
-        <button class="primary" id="addRowBtn">+ Adicionar linha</button>
-        <button id="dupRowBtn">Duplicar selecionadas</button>
-        <button class="danger" id="delRowBtn">Excluir selecionadas</button>
-        <button id="clearBtn" title="Remove todas as linhas">Limpar tudo</button>
-        <button id="exportBtn">Exportar CSV</button>
-        <label class="file-label" for="importFile">Importar CSV<input type="file" id="importFile" class="file-input" accept=".csv,text/csv" /></label>
-        <button id="saveBtn" title="Força salvar agora">Salvar</button>
-        <span class="stats" id="rowsCount">0 linhas</span>
-      </div>
-      <div class="search-wrap">
-        <input type="search" id="search" placeholder="Filtrar (LOJA, SKU, ID, Responsável, etc.)" />
-      </div>
-    </div>
-
-    <div class="sheet">
-      <table id="sheet">
-        <thead>
-          <tr>
-            <th class="row-select">Sel</th>
-            <th class="col-sm">DATA CONTROLE</th>
-            <th class="col-sm">DATA CONTROLE</th>
-            <th class="col-md">LOJA</th>
-            <th class="col-md">SKU</th>
-            <th class="col-lg">RECLAMAÇÃO</th>
-            <th class="col-md">ID DE VENDA</th>
-            <th class="col-md">TIPO RECLAMAÇÃO</th>
-            <th class="col-md">STATUS</th>
-            <th class="col-md">RESPONSAVEL</th>
-            <th class="col-sm right">VALOR</th>
-            <th class="col-lg">Observações</th>
-            <th class="col-sm">DATA BAIXA</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-        <tfoot>
-          <tr>
-            <td></td>
-            <td colspan="9"><strong>Total</strong></td>
-            <td class="right" id="totalValor">R$ 0,00</td>
-            <td colspan="2"></td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+<div class="menu">
+    <nav>
+      <ul>
+        <a href="index.html"><li><i class="bi bi-arrow-left"></i> Voltar</li></a>
+        <a href="settings.html"><li>Configurações</li></a>
+        <a href="planilha.html"><li>Registro de devolução</li></a>
+      </ul>
+    </nav>
   </div>
 
-  <script src="script.js"></script>
+<div class="conteudo-principal" style="margin-top: 60px;">
+  <div class="barra-ferramentas">
+    <h1 class="barra-ferramentas__titulo">Planilha de Reclamações</h1>
+
+    <button class="botao botao--primario" id="addRow">+ Linha</button>
+    <button class="botao" id="duplicateRow">Duplicar linha</button>
+    <button class="botao botao--perigo" id="deleteRow">Excluir linha</button>
+    <div class="espacador"></div>
+
+    <input class="campo-texto" id="search" placeholder="Buscar (SKU, ID venda, responsável, observações, etc.)" />
+    <select class="campo-selecao" id="statusFilter">
+      <option value="">Status: Todos</option>
+      <option>Aberta</option>
+      <option>Em Análise</option>
+      <option>Resolvida</option>
+      <option>Cancelada</option>
+    </select>
+
+    <button class="botao" id="exportCsv">Exportar CSV</button>
+    <button class="botao" id="exportJson">Exportar JSON</button>
+    <label class="botao botao--fantasma" for="importFile">Importar CSV</label>
+    <input class="campo-arquivo" type="file" id="importFile" accept=".csv,text/csv" />
+    <button class="botao" id="clearAll" title="Limpa a planilha e o armazenamento local">Limpar</button>
+  </div>
+
+  <div class="tabela-container">
+    <table class="tabela" id="sheet" aria-label="Planilha tipo Excel">
+      <thead>
+        <tr>
+          <th class="tabela__cabecalho-celula--ordenavel">DATA CONTROLE</th>
+          <th class="tabela__cabecalho-celula--ordenavel">DATA CONTROLE LOJA</th>
+          <th class="tabela__cabecalho-celula--ordenavel">SKU</th>
+          <th class="tabela__cabecalho-celula--ordenavel">RECLAMAÇÃO</th>
+          <th class="tabela__cabecalho-celula--ordenavel">ID DE VENDA</th>
+          <th class="tabela__cabecalho-celula--ordenavel">TIPO RECLAMAÇÃO</th>
+          <th class="tabela__cabecalho-celula--ordenavel">STATUS</th>
+          <th class="tabela__cabecalho-celula--ordenavel">RESPONSAVEL</th>
+          <th class="tabela__cabecalho-celula--ordenavel sem-quebra-linha">VALOR (R$)</th>
+          <th class="tabela__cabecalho-celula--ordenavel">Observações</th>
+          <th class="tabela__cabecalho-celula--ordenavel">DATA BAIXA</th>
+        </tr>
+      </thead>
+      <tbody id="body">
+        <!-- Linhas geradas via JS -->
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="tabela__rodape-celula" colspan="8">Totais</td>
+          <td class="tabela__rodape-celula" id="totalValor">R$ 0,00</td>
+          <td class="tabela__rodape-celula" colspan="2" id="countInfo" style="text-align:right"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div class="dica-campo">Dicas: clique em uma linha para selecioná-la. Duplo clique em uma célula para editar. Use TAB/SHIFT+TAB para navegar. A planilha salva automaticamente no seu navegador.</div>
+</div>
+
+<script>
+  // ======== Configuração da Planilha ========
+  const COLS = [
+    { key:"data_controle", label:"DATA CONTROLE", type:"date" },
+    { key:"data_controle_loja", label:"DATA CONTROLE LOJA", type:"date" },
+    { key:"sku", label:"SKU", type:"text" },
+    { key:"reclamacao", label:"RECLAMAÇÃO", type:"text" },
+    { key:"id_venda", label:"ID DE VENDA", type:"text" },
+    { key:"tipo", label:"TIPO RECLAMAÇÃO", type:"text" },
+    { key:"status", label:"STATUS", type:"status" },
+    { key:"responsavel", label:"RESPONSAVEL", type:"text" },
+    { key:"valor", label:"VALOR", type:"money" },
+    { key:"obs", label:"Observações", type:"text" },
+    { key:"data_baixa", label:"DATA BAIXA", type:"date" },
+  ];
+  const STORAGE_KEY = 'planilha_reclamacoes_v1';
+
+  // ======== Utilitários ========
+  const fmtBRL = new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' });
+  const parseBRL = (str)=>{
+    if (typeof str === 'number') return str;
+    if (!str) return 0;
+    // remove tudo menos dígitos e vírgula/ponto
+    const s = String(str).replace(/[^0-9,.-]/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',', '.');
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  };
+  const todayISO = ()=> new Date().toISOString().slice(0,10);
+
+  function makeStatusPill(value){
+    const v = (value||'').toLowerCase();
+    let cls='etiqueta-status';
+    if (v.includes('abert')) cls+=' etiqueta-status--aviso';
+    else if (v.includes('resol')) cls+=' etiqueta-status--ok';
+    else if (v.includes('cancel')) cls+=' etiqueta-status--perigo';
+    else cls+='';
+    return `<span class="${cls}">${value||''}</span>`
+  }
+
+  function toCSV(rows){
+    const header = COLS.map(c=>`"${c.label}"`).join(',');
+    const lines = rows.map(r=> COLS.map(c=>{
+      const v = r[c.key] ?? '';
+      const s = (c.type==='money') ? (parseBRL(v)||0) : v;
+      return `"${String(s).replace(/"/g,'""')}"`;
+    }).join(','));
+    return [header, ...lines].join('\n');
+  }
+  function fromCSV(text){
+    // Parser simples (RFC-light) – suporta aspas e vírgulas
+    const rows=[];
+    const lines = text.replace(/\r/g,'').split('\n').filter(Boolean);
+    if (!lines.length) return rows;
+    const header = lines[0].split(',').map(s=>s.replace(/^"|"$/g,''));
+    const idx = COLS.map(c=> header.findIndex(h=> h.toLowerCase().trim() === c.label.toLowerCase().trim()));
+    for (let i=1;i<lines.length;i++){
+      const cols = [];
+      let cur=''; let inQ=false;
+      for (let ch of lines[i]){
+        if (ch==='"') { inQ = !inQ; continue; }
+        if (ch===',' && !inQ){ cols.push(cur); cur=''; }
+        else cur+=ch;
+      }
+      cols.push(cur);
+      const obj={};
+      COLS.forEach((c,j)=>{ const k=idx[j]; obj[c.key] = k>=0 ? cols[k] : '' });
+      rows.push(obj);
+    }
+    return rows;
+  }
+
+  // ======== Estado ========
+  let data = [];
+  let sortState = { col: null, dir: 1 };
+
+  // ======== DOM ========
+  const $body = document.querySelector('#body');
+  const $search = document.querySelector('#search');
+  const $filter = document.querySelector('#statusFilter');
+  const $total = document.querySelector('#totalValor');
+  const $count = document.querySelector('#countInfo');
+
+  // ======== Renderização ========
+  function render(){
+    const q = ($search.value||'').toLowerCase();
+    const f = ($filter.value||'').toLowerCase();
+
+    // ordenar
+    let rows = [...data];
+    if (sortState.col!==null){
+      const col = COLS[sortState.col];
+      rows.sort((a,b)=>{
+        let va=a[col.key]??'', vb=b[col.key]??'';
+        if (col.type==='money'){ va=parseBRL(va); vb=parseBRL(vb); }
+        return (va>vb?1:va<vb?-1:0) * sortState.dir;
+      });
+    }
+
+    // filtrar
+    rows = rows.filter(r=>{
+      const statusOk = !f || String(r.status||'').toLowerCase().includes(f);
+      const text = Object.values(r).join(' ').toLowerCase();
+      const queryOk = !q || text.includes(q);
+      return statusOk && queryOk;
+    });
+
+    // pintar
+    $body.innerHTML = rows.map((r, i)=>{
+      return `<tr data-index="${data.indexOf(r)}">
+        ${COLS.map(c=>{
+          let val = r[c.key]??'';
+          if (c.type==='money' && val!=='' && !String(val).startsWith('R$')) val = fmtBRL.format(parseBRL(val));
+          if (c.type==='status') return `<td data-key="${c.key}">${makeStatusCell(val)}</td>`;
+          if (c.type==='date') return `<td data-key="${c.key}">${makeDateCell(val)}</td>`;
+          return `<td contenteditable="true" data-key="${c.key}">${escapeHtml(val)}</td>`;
+        }).join('')}
+      </tr>`
+    }).join('');
+
+    // totais
+    const sum = rows.reduce((acc,r)=> acc + parseBRL(r.valor), 0);
+    $total.textContent = fmtBRL.format(sum);
+    $count.textContent = `${rows.length} linhas`;
+
+    bindRowEvents();
+    persist();
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function makeStatusCell(value){
+    const opts = ['','Aberta','Em Análise','Resolvida','Cancelada'];
+    const options = opts.map(o=> `<option ${o===value?'selected':''}>${o}</option>`).join('');
+    return `<select class="campo-selecao" data-type="status">${options}</select><div style="margin-top:6px">${makeStatusPill(value)}</div>`
+  }
+  function makeDateCell(value){
+    const v = (value||'').slice(0,10);
+    return `<input type="date" value="${v}" data-type="date" class="campo-texto" style="padding:6px 8px; width: 160px;" />`;
+  }
+
+  function bindRowEvents(){
+    document.querySelectorAll('#body tr').forEach(tr=>{
+      tr.addEventListener('click',()=>{
+        document.querySelectorAll('#body tr').forEach(x=>x.classList.remove('linha-selecionada'));
+        tr.classList.add('linha-selecionada');
+      });
+      tr.querySelectorAll('td[contenteditable=true]').forEach(td=>{
+        td.addEventListener('blur', onEditCell);
+        td.addEventListener('keydown', (e)=>{
+          if (e.key==='Enter'){ e.preventDefault(); td.blur(); }
+        });
+      });
+      tr.querySelectorAll('select[data-type=status]').forEach(sel=>{
+        sel.addEventListener('change', (e)=>{
+          const td = e.target.closest('td');
+          const idx = Number(tr.getAttribute('data-index'));
+          const key = td.dataset.key; data[idx][key] = e.target.value; 
+          // atualiza pill
+          td.querySelector('div').innerHTML = makeStatusPill(e.target.value);
+          render();
+        })
+      })
+      tr.querySelectorAll('input[data-type=date]').forEach(inp=>{
+        inp.addEventListener('change', (e)=>{
+          const td = e.target.closest('td');
+          const idx = Number(tr.getAttribute('data-index'));
+          const key = td.dataset.key; data[idx][key] = e.target.value; 
+          render();
+        })
+      })
+    });
+  }
+
+  function onEditCell(e){
+    const td = e.target; const tr = td.closest('tr');
+    const idx = Number(tr.getAttribute('data-index'));
+    const key = td.dataset.key; let val = td.textContent.trim();
+    const col = COLS.find(c=>c.key===key);
+    if (col.type==='money'){
+      const n = parseBRL(val); val = n? fmtBRL.format(n) : '';
+      td.textContent = val;
+    }
+    data[idx][key] = val; render();
+  }
+
+  // ======== Ações ========
+  document.getElementById('addRow').onclick = ()=>{
+    data.push({ status:'Aberta', data_controle: todayISO() });
+    render();
+    // foca na última linha, coluna SKU
+    const last = $body.querySelector('tr:last-child td[data-key="sku"]');
+    if (last){ last.setAttribute('contenteditable','true'); last.focus(); }
+  }
+  document.getElementById('duplicateRow').onclick = ()=>{
+    const sel = document.querySelector('#body tr.linha-selecionada');
+    if (!sel) return alert('Selecione uma linha primeiro.');
+    const idx = Number(sel.getAttribute('data-index'));
+    const clone = JSON.parse(JSON.stringify(data[idx]));
+    data.splice(idx+1,0,clone);
+    render();
+  }
+  document.getElementById('deleteRow').onclick = ()=>{
+    const sel = document.querySelector('#body tr.linha-selecionada');
+    if (!sel) return alert('Selecione uma linha para excluir.');
+    const idx = Number(sel.getAttribute('data-index'));
+    if (confirm('Excluir a linha selecionada?')){ data.splice(idx,1); render(); }
+  }
+
+  document.getElementById('clearAll').onclick = ()=>{
+    if (!confirm('Tem certeza? Isso limpará a planilha e o armazenamento local.')) return;
+    data = []; render();
+  }
+
+  document.getElementById('exportCsv').onclick = ()=>{
+    const csv = toCSV(data);
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `planilha-reclamacoes-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  }
+  document.getElementById('exportJson').onclick = ()=>{
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `planilha-reclamacoes-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+  }
+
+  document.getElementById('importFile').addEventListener('change', (e)=>{
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      try{
+        const text = reader.result;
+        const rows = fromCSV(text);
+        if (!rows.length) return alert('CSV vazio ou cabeçalho inválido.');
+        data = rows; render();
+      }catch(err){ alert('Falha ao importar CSV: '+err.message); }
+    };
+    reader.readAsText(file, 'utf-8');
+  });
+
+  $search.addEventListener('input', render);
+  $filter.addEventListener('change', render);
+
+  // ordenar por cabeçalho
+  document.querySelectorAll('thead th.tabela__cabecalho-celula--ordenavel').forEach((th, i)=>{
+    th.addEventListener('click', ()=>{
+      if (sortState.col===i) sortState.dir*=-1; else { sortState.col=i; sortState.dir=1; }
+      render();
+    })
+  })
+
+  // ======== Persistência (LocalStorage) ========
+  function persist(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+  function load(){
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw){
+      try{ data = JSON.parse(raw)||[] }catch{ data=[] }
+    } else {
+      // Linha de exemplo
+      data=[{ data_controle: todayISO(), data_controle_loja: todayISO(), sku:'MLB123-456', reclamacao:'Cliente relata atraso de entrega', id_venda:'ABCD1234', tipo:'Logística', status:'Em Análise', responsavel:'Rodrigo', valor: fmtBRL.format(59.9), obs:'Abrir chamado com transportadora', data_baixa:'' }];
+    }
+  }
+
+  // Boot
+  load();
+  render();
+</script>
 </body>
 </html>
