@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planilha de Reclamações — Simulador tipo Excel</title>
+  <link rel="stylesheet" href="css/planilha.css">
+</head>
+<body>
+  <div class="wrapper container">
+    <img src="logo.png" alt="Logo" class="logo">
+    <h1>Planilha de Reclamações</h1>
+    <div class="desc">Simulador tipo Excel com edição direta, salvamento local, filtros e exportação CSV. Campos: <strong>DATA CONTROLE</strong>, <strong>DATA CONTROLE</strong>, <strong>LOJA</strong>, <strong>SKU</strong>, <strong>RECLAMAÇÃO</strong>, <strong>ID DE VENDA</strong>, <strong>TIPO RECLAMAÇÃO</strong>, <strong>STATUS</strong>, <strong>RESPONSAVEL</strong>, <strong>VALOR</strong>, <strong>Observações</strong>, <strong>DATA BAIXA</strong>.</div>
+
+    <div class="toolbar">
+      <div class="btns">
+        <button class="primary" id="addRowBtn">+ Adicionar linha</button>
+        <button id="dupRowBtn">Duplicar selecionadas</button>
+        <button class="danger" id="delRowBtn">Excluir selecionadas</button>
+        <button id="clearBtn" title="Remove todas as linhas">Limpar tudo</button>
+        <button id="exportBtn">Exportar CSV</button>
+        <label class="file-label" for="importFile">Importar CSV<input type="file" id="importFile" class="file-input" accept=".csv,text/csv" /></label>
+        <button id="saveBtn" title="Força salvar agora">Salvar</button>
+        <span class="stats" id="rowsCount">0 linhas</span>
+      </div>
+      <div class="search-wrap">
+        <input type="search" id="search" placeholder="Filtrar (LOJA, SKU, ID, Responsável, etc.)" />
+      </div>
+    </div>
+
+    <div class="sheet">
+      <table id="sheet">
+        <thead>
+          <tr>
+            <th class="row-select">Sel</th>
+            <th class="col-sm">DATA CONTROLE</th>
+            <th class="col-sm">DATA CONTROLE</th>
+            <th class="col-md">LOJA</th>
+            <th class="col-md">SKU</th>
+            <th class="col-lg">RECLAMAÇÃO</th>
+            <th class="col-md">ID DE VENDA</th>
+            <th class="col-md">TIPO RECLAMAÇÃO</th>
+            <th class="col-md">STATUS</th>
+            <th class="col-md">RESPONSAVEL</th>
+            <th class="col-sm right">VALOR</th>
+            <th class="col-lg">Observações</th>
+            <th class="col-sm">DATA BAIXA</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td colspan="9"><strong>Total</strong></td>
+            <td class="right" id="totalValor">R$ 0,00</td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

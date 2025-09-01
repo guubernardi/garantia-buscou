@@ -1,0 +1,185 @@
+/* ========= Layout principal ========= */
+.container {
+    margin: auto;
+    height: auto;
+    padding: 50px; 
+    display: contents;
+}
+
+.logo {
+    max-width: 140px;
+    margin-bottom: 20px;
+}
+
+/* ========= Tema geral ========= */
+:root {
+    --bg: #f9fbff;
+    --panel: #ffffff;
+    --panel-2: #f0f4ff;
+    --text: #1a1a1a;
+    --muted: #5c6f91;
+    --accent: #2563eb;
+    --grid: #d4dbea;
+    --grid-2: #e9eef7;
+    --ok: #16a34a;
+    --warn: #f59e0b;
+    --bad: #dc2626;
+    --shadow: 0 5px 15px rgba(0,0,0,.1);
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* ========= Cabeçalho ========= */
+h1 {
+    font-weight: 700;
+    margin: 0 0 12px;
+    color: var(--accent);
+}
+
+.desc {
+    color: var(--muted);
+    margin-bottom: 16px;
+}
+
+/* ========= Botões ========= */
+button, .file-label {
+    background: #fff;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+button:hover, .file-label:hover {
+    background: var(--accent);
+    color: #fff;
+}
+
+/* Botão principal (Adicionar linha) */
+.primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+.primary:hover {
+    background: #1e4fc3;
+}
+
+/* Botão de perigo (Excluir) */
+.danger {
+    background: var(--bad);
+    border-color: var(--bad);
+    color: #fff;
+}
+.danger:hover {
+    background: #b91c1c;
+}
+
+
+/* ========= Toolbar ========= */
+.toolbar {
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    border: 1px solid var(--grid);
+    border-radius: 12px;
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+    box-shadow: var(--shadow);
+    position: sticky; 
+    top: 12px; 
+    z-index: 20;
+}
+
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+
+button, .file-label {
+    background: #f5f9ff;
+    border: 1px solid var(--grid);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.2s;
+}
+button:hover, .file-label:hover { background: #e0ebff; border-color: var(--accent); }
+.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.primary:hover { background: #1e4fc3; }
+.danger { background: var(--bad); color: #fff; border-color: var(--bad); }
+.danger:hover { background: #b91c1c; }
+
+input[type="search"] {
+    background: #fff;
+    border: 1px solid var(--grid);
+    padding: 10px;
+    border-radius: 8px;
+    outline: none;
+    width: 260px;
+}
+
+/* ========= Tabela ========= */
+.sheet {
+    overflow: auto; 
+    margin-top: 16px; 
+    border-radius: 12px; 
+    border: 1px solid var(--grid); 
+    box-shadow: var(--shadow);
+    background: #fff;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1200px;
+}
+
+thead th {
+    background: var(--accent);
+    color: #fff;
+    padding: 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+tbody tr:nth-child(even) { background: var(--grid-2); }
+tbody tr:nth-child(odd) { background: #fff; }
+
+.cell {
+    padding: 8px;
+    min-width: 120px;
+}
+
+.cell input, .cell select, .cell textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    padding: 6px;
+    resize: vertical;
+}
+
+tfoot {
+    background: var(--panel-2);
+    font-weight: 600;
+}
+
+tfoot td { padding: 10px; }
+
+.right { text-align: right; }
+
+.row-select { text-align: center; }

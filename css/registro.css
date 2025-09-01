@@ -1,15 +1,8 @@
 @charset "UTF-8";
 
 body {
-font-family: sans-serif;
-text-align: center;
-padding-top: 50px;
+    display: flex;
 }
-
-h1 {
-color: #333;
-}
-
 
 .menu {
     position: fixed;
@@ -62,3 +55,25 @@ color: #333;
     font-size: 1.1em;
     vertical-align: middle;
     }
+
+    /* ==== ANIMAÇÃO ==== */
+.title-updated {
+  animation: flash 500ms ease-in-out;
+  animation-fill-mode: backwards;
+}
+@keyframes flash {
+  0% { background-color: #fff7b1; }
+  100% { background-color: transparent; }
+}
+
+.container {
+    display: flex;
+}
+
+/* ==== TÍTULO ==== */
+h1 {
+  font-family: "Kanit", Arial, Helvetica, sans-serif;
+  font-size: 1.2em;
+  text-align: center;
+  gap: 3em;
+}
