@@ -1,352 +1,204 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="css/planilha.css">
-  <title>Planilha de Reclamações</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+    <link rel="manifest" href="assets/icons/site.webmanifest">
+    <title>Planilha de Reclamações</title>
+    <link rel="stylesheet" href="css/planilha.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet">
 </head>
 <body>
+    <div class="min-h-screen" style="background: linear-gradient(180deg, #f7fafc, #eef2f7 60%, #eaf0ff)">
+        <!-- Header Navigation -->
+        <header class="fixed top-0 left-0 right-0 z-50 bg-white-80 header-backdrop border-b border-slate-200-60 shadow-sm">
+            <nav class="max-w-7xl mx-auto px-4 h-16 flex items-center gap-6">
+                <a href="index.html" class="nav-btn">
+                    <i data-lucide="arrow-left"></i>
+                    Voltar
+                </a>
+                <a href="settings.html" class="nav-btn">
+                    <i data-lucide="settings"></i>
+                    Configurações
+                </a>
+                <a href="editor.html" class="nav-btn">
+                    <i data-lucide="file-text"></i>
+                    Registro de devolução
+                </a>
+            </nav>
+        </header>
 
-<div class="menu">
-    <nav>
-      <ul>
-        <a href="index.html"><li><i class="bi bi-arrow-left"></i> Voltar</li></a>
-        <a href="settings.html"><li>Configurações</li></a>
-        <a href="planilha.html"><li>Registro de devolução</li></a>
-      </ul>
-    </nav>
-  </div>
+        <!-- Main Content -->
+        <main class="pt-20 pb-8 px-4 max-w-7xl mx-auto">
+            <!-- Toolbar -->
+            <div class="mb-6 bg-white-95 header-backdrop border border-slate-200-60 rounded-2xl container-shadow p-4 sticky top-20 z-40">
+                <div class="flex flex-wrap items-center gap-3">
+                    <h1 class="text-xl font-bold text-slate-800 mr-4 tracking-wide">📊 Planilha de Reclamações</h1>
 
-<div class="conteudo-principal" style="margin-top: 60px;">
-  <div class="barra-ferramentas">
-    <h1 class="barra-ferramentas__titulo">Planilha de Reclamações</h1>
+                    <button id="addRowBtn" class="btn btn-primary">
+                        <i data-lucide="plus"></i>
+                        Linha
+                    </button>
 
-    <button class="botao botao--primario" id="addRow">+ Linha</button>
-    <button class="botao" id="duplicateRow">Duplicar linha</button>
-    <button class="botao botao--perigo" id="deleteRow">Excluir linha</button>
-    <div class="espacador"></div>
+                    <button id="duplicateRowBtn" class="btn btn-secondary">
+                        <i data-lucide="copy"></i>
+                        Duplicar
+                    </button>
 
-    <input class="campo-texto" id="search" placeholder="Buscar (SKU, ID venda, responsável, observações, etc.)" />
-    <select class="campo-selecao" id="statusFilter">
-      <option value="">Status: Todos</option>
-      <option>Aberta</option>
-      <option>Em Análise</option>
-      <option>Resolvida</option>
-      <option>Cancelada</option>
-    </select>
+                    <button id="deleteRowBtn" class="btn btn-danger">
+                        <i data-lucide="trash-2"></i>
+                        Excluir
+                    </button>
 
-    <button class="botao" id="exportCsv">Exportar CSV</button>
-    <button class="botao" id="exportJson">Exportar JSON</button>
-    <label class="botao botao--fantasma" for="importFile">Importar CSV</label>
-    <input class="campo-arquivo" type="file" id="importFile" accept=".csv,text/csv" />
-    <button class="botao" id="clearAll" title="Limpa a planilha e o armazenamento local">Limpar</button>
-  </div>
+                    <div class="flex-1"></div>
 
-  <div class="tabela-container">
-    <table class="tabela" id="sheet" aria-label="Planilha tipo Excel">
-      <thead>
-        <tr>
-          <th class="tabela__cabecalho-celula--ordenavel">DATA CONTROLE</th>
-          <th class="tabela__cabecalho-celula--ordenavel">DATA CONTROLE LOJA</th>
-          <th class="tabela__cabecalho-celula--ordenavel">SKU</th>
-          <th class="tabela__cabecalho-celula--ordenavel">RECLAMAÇÃO</th>
-          <th class="tabela__cabecalho-celula--ordenavel">ID DE VENDA</th>
-          <th class="tabela__cabecalho-celula--ordenavel">TIPO RECLAMAÇÃO</th>
-          <th class="tabela__cabecalho-celula--ordenavel">STATUS</th>
-          <th class="tabela__cabecalho-celula--ordenavel">RESPONSAVEL</th>
-          <th class="tabela__cabecalho-celula--ordenavel sem-quebra-linha">VALOR (R$)</th>
-          <th class="tabela__cabecalho-celula--ordenavel">Observações</th>
-          <th class="tabela__cabecalho-celula--ordenavel">DATA BAIXA</th>
-        </tr>
-      </thead>
-      <tbody id="body">
-        <!-- Linhas geradas via JS -->
-      </tbody>
-      <tfoot>
-        <tr>
-          <td class="tabela__rodape-celula" colspan="8">Totais</td>
-          <td class="tabela__rodape-celula" id="totalValor">R$ 0,00</td>
-          <td class="tabela__rodape-celula" colspan="2" id="countInfo" style="text-align:right"></td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-  <div class="dica-campo">Dicas: clique em uma linha para selecioná-la. Duplo clique em uma célula para editar. Use TAB/SHIFT+TAB para navegar. A planilha salva automaticamente no seu navegador.</div>
-</div>
+                    <div class="relative">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Buscar (SKU, ID venda, responsável...)"
+                            class="input-field pl-10 min-w-280"
+                        />
+                    </div>
 
-<script>
-  // ======== Configuração da Planilha ========
-  const COLS = [
-    { key:"data_controle", label:"DATA CONTROLE", type:"date" },
-    { key:"data_controle_loja", label:"DATA CONTROLE LOJA", type:"date" },
-    { key:"sku", label:"SKU", type:"text" },
-    { key:"reclamacao", label:"RECLAMAÇÃO", type:"text" },
-    { key:"id_venda", label:"ID DE VENDA", type:"text" },
-    { key:"tipo", label:"TIPO RECLAMAÇÃO", type:"text" },
-    { key:"status", label:"STATUS", type:"status" },
-    { key:"responsavel", label:"RESPONSAVEL", type:"text" },
-    { key:"valor", label:"VALOR", type:"money" },
-    { key:"obs", label:"Observações", type:"text" },
-    { key:"data_baixa", label:"DATA BAIXA", type:"date" },
-  ];
-  const STORAGE_KEY = 'planilha_reclamacoes_v1';
+                    <div class="relative">
+                        <i data-lucide="filter" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                        <select id="statusFilter" class="input-field pl-10 min-w-160">
+                            <option value="">Todos os Status</option>
+                            <option value="Aberta">Aberta</option>
+                            <option value="Em Análise">Em Análise</option>
+                            <option value="Resolvida">Resolvida</option>
+                            <option value="Cancelada">Cancelada</option>
+                        </select>
+                    </div>
 
-  // ======== Utilitários ========
-  const fmtBRL = new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' });
-  const parseBRL = (str)=>{
-    if (typeof str === 'number') return str;
-    if (!str) return 0;
-    // remove tudo menos dígitos e vírgula/ponto
-    const s = String(str).replace(/[^0-9,.-]/g,'').replace(/\.(?=\d{3}(\D|$))/g,'').replace(',', '.');
-    const n = parseFloat(s);
-    return isNaN(n) ? 0 : n;
-  };
-  const todayISO = ()=> new Date().toISOString().slice(0,10);
+                    <button id="exportCSVBtn" class="btn btn-secondary">
+                        <i data-lucide="download"></i>
+                        CSV
+                    </button>
 
-  function makeStatusPill(value){
-    const v = (value||'').toLowerCase();
-    let cls='etiqueta-status';
-    if (v.includes('abert')) cls+=' etiqueta-status--aviso';
-    else if (v.includes('resol')) cls+=' etiqueta-status--ok';
-    else if (v.includes('cancel')) cls+=' etiqueta-status--perigo';
-    else cls+='';
-    return `<span class="${cls}">${value||''}</span>`
-  }
+                    <button id="exportJSONBtn" class="btn btn-secondary">
+                        <i data-lucide="download"></i>
+                        JSON
+                    </button>
 
-  function toCSV(rows){
-    const header = COLS.map(c=>`"${c.label}"`).join(',');
-    const lines = rows.map(r=> COLS.map(c=>{
-      const v = r[c.key] ?? '';
-      const s = (c.type==='money') ? (parseBRL(v)||0) : v;
-      return `"${String(s).replace(/"/g,'""')}"`;
-    }).join(','));
-    return [header, ...lines].join('\n');
-  }
-  function fromCSV(text){
-    // Parser simples (RFC-light) – suporta aspas e vírgulas
-    const rows=[];
-    const lines = text.replace(/\r/g,'').split('\n').filter(Boolean);
-    if (!lines.length) return rows;
-    const header = lines[0].split(',').map(s=>s.replace(/^"|"$/g,''));
-    const idx = COLS.map(c=> header.findIndex(h=> h.toLowerCase().trim() === c.label.toLowerCase().trim()));
-    for (let i=1;i<lines.length;i++){
-      const cols = [];
-      let cur=''; let inQ=false;
-      for (let ch of lines[i]){
-        if (ch==='"') { inQ = !inQ; continue; }
-        if (ch===',' && !inQ){ cols.push(cur); cur=''; }
-        else cur+=ch;
-      }
-      cols.push(cur);
-      const obj={};
-      COLS.forEach((c,j)=>{ const k=idx[j]; obj[c.key] = k>=0 ? cols[k] : '' });
-      rows.push(obj);
-    }
-    return rows;
-  }
+                    <button id="importBtn" class="btn btn-secondary">
+                        <i data-lucide="upload"></i>
+                        Importar
+                    </button>
 
-  // ======== Estado ========
-  let data = [];
-  let sortState = { col: null, dir: 1 };
+                    <button id="clearAllBtn" class="btn btn-danger">
+                        <i data-lucide="rotate-ccw"></i>
+                        Limpar
+                    </button>
 
-  // ======== DOM ========
-  const $body = document.querySelector('#body');
-  const $search = document.querySelector('#search');
-  const $filter = document.querySelector('#statusFilter');
-  const $total = document.querySelector('#totalValor');
-  const $count = document.querySelector('#countInfo');
+                    <input type="file" id="fileInput" accept=".csv,text/csv" style="display: none;">
+                </div>
+            </div>
 
-  // ======== Renderização ========
-  function render(){
-    const q = ($search.value||'').toLowerCase();
-    const f = ($filter.value||'').toLowerCase();
+            <!-- Table Container -->
+            <div class="bg-white-95 header-backdrop border border-slate-200-60 rounded-2xl container-shadow overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full" id="mainTable">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-slate-50 to-blue-50 border-b border-slate-200">
+                                <th class="table-header sortable" data-col="0">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-semibold text-slate-700 text-sm uppercase tracking-wide">DATA CONTROLE</span>
+                                        <span class="sort-icon"><i data-lucide="arrow-up-down"></i></span>
+                                    </div>
+                                </th>
+                                <th class="table-header sortable" data-col="1">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-semibold text-slate-700 text-sm uppercase tracking-wide">DATA CONTROLE LOJA</span>
+                                        <span class="sort-icon"><i data-lucide="arrow-up-down"></i></span>
+                                    </div>
+                                </th>
+                                <th class="table-header sortable" data-col="2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-semibold text-slate-700 text-sm uppercase tracking-wide">SKU</span>
+                                        <span class="sort-icon"><i data-lucide="arrow-up-down"></i></span>
+                                    </div>
+                                </th>
+                                <th class="table-header sortable" data-col="3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-semibold text-slate-700 text-sm uppercase tracking-wide">RECLAMAÇÃO</span>
+                                        <span class="sort-icon"><i data-lucide="arrow-up-down"></i></span>
+                                    </div>
+                                </th>
+                                <th class="table-header sortable" data-col="4">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-semibold text-slate-700 text-sm uppercase tracking-wide">ID DE VENDA</span>
+                                        <span class="sort-icon"><i data-lucide="arrow-up-down"></i></span>
+                                    </div>
+                                </th>
+                                <th class="table-header sortable" data-col="5">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-semibold text-slate-700 text-sm uppercase tracking-wide">TIPO RECLAMAÇÃO</span>
+                                        <span class="sort-icon"><i data-lucide="arrow-up-down"></i></span>
+                                    </div>
+                                </th>
+                                <th class="table-header sortable" data-col="6">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-semibold text-slate-700 text-sm uppercase tracking-wide">STATUS</span>
+                                        <span class="sort-icon"><i data-lucide="arrow-up-down"></i></span>
+                                    </div>
+                                </th>
+                                <th class="table-header sortable" data-col="7">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-semibold text-slate-700 text-sm uppercase tracking-wide">RESPONSAVEL</span>
+                                        <span class="sort-icon"><i data-lucide="arrow-up-down"></i></span>
+                                    </div>
+                                </th>
+                                <th class="table-header sortable" data-col="8">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-semibold text-slate-700 text-sm uppercase tracking-wide">VALOR</span>
+                                        <span class="sort-icon"><i data-lucide="arrow-up-down"></i></span>
+                                    </div>
+                                </th>
+                                <th class="table-header sortable" data-col="9">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-semibold text-slate-700 text-sm uppercase tracking-wide">OBSERVAÇÕES</span>
+                                        <span class="sort-icon"><i data-lucide="arrow-up-down"></i></span>
+                                    </div>
+                                </th>
+                                <th class="table-header sortable" data-col="10">
+                                    <div class="flex items-center justify-between">
+                                        <span class="font-semibold text-slate-700 text-sm uppercase tracking-wide">DATA BAIXA</span>
+                                        <span class="sort-icon"><i data-lucide="arrow-up-down"></i></span>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Rows will be generated by JavaScript -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-gradient-to-r from-blue-50 to-indigo-50 border-t border-slate-200">
+                                <td colspan="8" class="table-footer font-bold text-slate-800">Totais</td>
+                                <td id="totalValue" class="table-footer font-bold text-green-600">R$ 0,00</td>
+                                <td colspan="2" class="table-footer text-right font-semibold text-slate-600">
+                                    <span id="rowCount">0</span> linhas
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
 
-    // ordenar
-    let rows = [...data];
-    if (sortState.col!==null){
-      const col = COLS[sortState.col];
-      rows.sort((a,b)=>{
-        let va=a[col.key]??'', vb=b[col.key]??'';
-        if (col.type==='money'){ va=parseBRL(va); vb=parseBRL(vb); }
-        return (va>vb?1:va<vb?-1:0) * sortState.dir;
-      });
-    }
+            <!-- Footer Tips -->
+            <div class="mt-6 text-center text-sm text-slate-500 bg-white-60 header-backdrop rounded-xl p-4 border border-slate-200-40">
+                💡 <strong>Dicas:</strong> Clique em uma linha para selecioná-la. Use os campos para editar diretamente.
+                Clique nos cabeçalhos para ordenar. A planilha salva automaticamente no seu navegador.
+            </div>
+        </main>
+    </div>
 
-    // filtrar
-    rows = rows.filter(r=>{
-      const statusOk = !f || String(r.status||'').toLowerCase().includes(f);
-      const text = Object.values(r).join(' ').toLowerCase();
-      const queryOk = !q || text.includes(q);
-      return statusOk && queryOk;
-    });
-
-    // pintar
-    $body.innerHTML = rows.map((r, i)=>{
-      return `<tr data-index="${data.indexOf(r)}">
-        ${COLS.map(c=>{
-          let val = r[c.key]??'';
-          if (c.type==='money' && val!=='' && !String(val).startsWith('R$')) val = fmtBRL.format(parseBRL(val));
-          if (c.type==='status') return `<td data-key="${c.key}">${makeStatusCell(val)}</td>`;
-          if (c.type==='date') return `<td data-key="${c.key}">${makeDateCell(val)}</td>`;
-          return `<td contenteditable="true" data-key="${c.key}">${escapeHtml(val)}</td>`;
-        }).join('')}
-      </tr>`
-    }).join('');
-
-    // totais
-    const sum = rows.reduce((acc,r)=> acc + parseBRL(r.valor), 0);
-    $total.textContent = fmtBRL.format(sum);
-    $count.textContent = `${rows.length} linhas`;
-
-    bindRowEvents();
-    persist();
-  }
-
-  function escapeHtml(s){
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  function makeStatusCell(value){
-    const opts = ['','Aberta','Em Análise','Resolvida','Cancelada'];
-    const options = opts.map(o=> `<option ${o===value?'selected':''}>${o}</option>`).join('');
-    return `<select class="campo-selecao" data-type="status">${options}</select><div style="margin-top:6px">${makeStatusPill(value)}</div>`
-  }
-  function makeDateCell(value){
-    const v = (value||'').slice(0,10);
-    return `<input type="date" value="${v}" data-type="date" class="campo-texto" style="padding:6px 8px; width: 160px;" />`;
-  }
-
-  function bindRowEvents(){
-    document.querySelectorAll('#body tr').forEach(tr=>{
-      tr.addEventListener('click',()=>{
-        document.querySelectorAll('#body tr').forEach(x=>x.classList.remove('linha-selecionada'));
-        tr.classList.add('linha-selecionada');
-      });
-      tr.querySelectorAll('td[contenteditable=true]').forEach(td=>{
-        td.addEventListener('blur', onEditCell);
-        td.addEventListener('keydown', (e)=>{
-          if (e.key==='Enter'){ e.preventDefault(); td.blur(); }
-        });
-      });
-      tr.querySelectorAll('select[data-type=status]').forEach(sel=>{
-        sel.addEventListener('change', (e)=>{
-          const td = e.target.closest('td');
-          const idx = Number(tr.getAttribute('data-index'));
-          const key = td.dataset.key; data[idx][key] = e.target.value; 
-          // atualiza pill
-          td.querySelector('div').innerHTML = makeStatusPill(e.target.value);
-          render();
-        })
-      })
-      tr.querySelectorAll('input[data-type=date]').forEach(inp=>{
-        inp.addEventListener('change', (e)=>{
-          const td = e.target.closest('td');
-          const idx = Number(tr.getAttribute('data-index'));
-          const key = td.dataset.key; data[idx][key] = e.target.value; 
-          render();
-        })
-      })
-    });
-  }
-
-  function onEditCell(e){
-    const td = e.target; const tr = td.closest('tr');
-    const idx = Number(tr.getAttribute('data-index'));
-    const key = td.dataset.key; let val = td.textContent.trim();
-    const col = COLS.find(c=>c.key===key);
-    if (col.type==='money'){
-      const n = parseBRL(val); val = n? fmtBRL.format(n) : '';
-      td.textContent = val;
-    }
-    data[idx][key] = val; render();
-  }
-
-  // ======== Ações ========
-  document.getElementById('addRow').onclick = ()=>{
-    data.push({ status:'Aberta', data_controle: todayISO() });
-    render();
-    // foca na última linha, coluna SKU
-    const last = $body.querySelector('tr:last-child td[data-key="sku"]');
-    if (last){ last.setAttribute('contenteditable','true'); last.focus(); }
-  }
-  document.getElementById('duplicateRow').onclick = ()=>{
-    const sel = document.querySelector('#body tr.linha-selecionada');
-    if (!sel) return alert('Selecione uma linha primeiro.');
-    const idx = Number(sel.getAttribute('data-index'));
-    const clone = JSON.parse(JSON.stringify(data[idx]));
-    data.splice(idx+1,0,clone);
-    render();
-  }
-  document.getElementById('deleteRow').onclick = ()=>{
-    const sel = document.querySelector('#body tr.linha-selecionada');
-    if (!sel) return alert('Selecione uma linha para excluir.');
-    const idx = Number(sel.getAttribute('data-index'));
-    if (confirm('Excluir a linha selecionada?')){ data.splice(idx,1); render(); }
-  }
-
-  document.getElementById('clearAll').onclick = ()=>{
-    if (!confirm('Tem certeza? Isso limpará a planilha e o armazenamento local.')) return;
-    data = []; render();
-  }
-
-  document.getElementById('exportCsv').onclick = ()=>{
-    const csv = toCSV(data);
-    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `planilha-reclamacoes-${new Date().toISOString().slice(0,10)}.csv`;
-    a.click();
-  }
-  document.getElementById('exportJson').onclick = ()=>{
-    const json = JSON.stringify(data, null, 2);
-    const blob = new Blob([json], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `planilha-reclamacoes-${new Date().toISOString().slice(0,10)}.json`;
-    a.click();
-  }
-
-  document.getElementById('importFile').addEventListener('change', (e)=>{
-    const file = e.target.files[0]; if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ()=>{
-      try{
-        const text = reader.result;
-        const rows = fromCSV(text);
-        if (!rows.length) return alert('CSV vazio ou cabeçalho inválido.');
-        data = rows; render();
-      }catch(err){ alert('Falha ao importar CSV: '+err.message); }
-    };
-    reader.readAsText(file, 'utf-8');
-  });
-
-  $search.addEventListener('input', render);
-  $filter.addEventListener('change', render);
-
-  // ordenar por cabeçalho
-  document.querySelectorAll('thead th.tabela__cabecalho-celula--ordenavel').forEach((th, i)=>{
-    th.addEventListener('click', ()=>{
-      if (sortState.col===i) sortState.dir*=-1; else { sortState.col=i; sortState.dir=1; }
-      render();
-    })
-  })
-
-  // ======== Persistência (LocalStorage) ========
-  function persist(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
-  function load(){
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw){
-      try{ data = JSON.parse(raw)||[] }catch{ data=[] }
-    } else {
-      // Linha de exemplo
-      data=[{ data_controle: todayISO(), data_controle_loja: todayISO(), sku:'MLB123-456', reclamacao:'Cliente relata atraso de entrega', id_venda:'ABCD1234', tipo:'Logística', status:'Em Análise', responsavel:'Rodrigo', valor: fmtBRL.format(59.9), obs:'Abrir chamado com transportadora', data_baixa:'' }];
-    }
-  }
-
-  // Boot
-  load();
-  render();
-</script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="js/planilha.js"></script>
 </body>
 </html>
